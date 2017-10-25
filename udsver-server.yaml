@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: udsver-server
+spec:
+  template:
+    metadata:
+      labels:
+        app: udsver-server
+        version: v1
+    spec:
+      hostPID: true
+      containers:
+      - name: udsver-server
+        image: quay.io/saurabh/udsver:latest
+        imagePullPolicy: Always
+        volumeMounts:
+        - mountPath: /tmp/udsver
+          name: test-volume
+        - mountPath: /tmp/proc
+          name: test-proc
+      volumes:
+        - name: test-volume
+          hostPath:
+            # directory location on host
+            path: /tmp/udsver
+            # this field is optional
+            # type: Socket 
+        - name: test-proc
+          hostPath:
+            path: /proc
